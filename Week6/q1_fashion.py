@@ -49,13 +49,15 @@ class CNNClassifier(nn.Module):
 transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
 
 mnist_testset = datasets.FashionMNIST(root='./data', train=False, download=True, transform=transform)
-test_loader = DataLoader(mnist_testset, batch_size=64, shuffle=False)
+test_loader = DataLoader(mnist_testset, batch_size=1, shuffle=False)
 
 # Step 2: Load the pre-trained model from disk
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+path = torch.load("./ModelFiles/model.pth")
 
 # Load the entire model (which includes both architecture and trained parameters)
-model = torch.load("./ModelFiles/model.pt")
+model=CNNClassifier()
+model.load_state_dict(path)
 model.to(device)  # Move the model to the correct device (GPU/CPU)
 
 # Step 3: Print model state_dict (inspect parameters)
@@ -79,9 +81,6 @@ for i, (inputs, labels) in enumerate(test_loader):
     # Get predicted class label (highest value in the output layer)
     _, predicted = torch.max(outputs, 1)
 
-    # Print the true and predicted labels
-    print("True label:{}".format(labels))
-    print('Predicted: {}'.format(predicted))
 
     # Calculate total number of labels
     total += labels.size(0)

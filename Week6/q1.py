@@ -90,7 +90,10 @@ for epoch in range(num_epochs):
 
         outputs = model(inputs)  # Forward pass
         loss = criterion(outputs, labels)  # Compute the loss
-        loss.backward()  # Backward pass
+        loss.backward(
+
+
+)  # Backward pass
         optimizer.step()  # Update weights
 
         running_loss += loss.item()
@@ -121,5 +124,5 @@ test_accuracy = 100 * correct / total
 print(f"Test Accuracy: {test_accuracy:.2f}%")
 
 # Save the trained model
-torch.save(model, "./ModelFiles/model.pt")
+torch.save(model.state_dict(), "./ModelFiles/model.pth")
 print("Optimized model saved to ./ModelFiles/model.pt")
